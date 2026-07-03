@@ -1,0 +1,19 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "columns": [
+        { "name": "id", "type": "INTEGER", "primary_key": true, "auto_increment": true },
+        { "name": "username", "type": "TEXT", "unique": true, "not_null": true },
+        { "name": "password_hash", "type": "TEXT", "not_null": true }
+      ]
+    },
+    {
+      "name": "boards",
+      "columns": [
+        { "name": "user_id", "type": "INTEGER", "primary_key": true, "foreign_key": "users.id", "not_null": true },
+        { "name": "data", "type": "JSON", "not_null": true, "description": "The entire BoardData JSON object" }
+      ]
+    }
+  ]
+}
