@@ -11,6 +11,7 @@ type SidebarProps = {
 };
 
 type ChatMessage = {
+  id: string;
   role: "user" | "ai";
   content: string;
 };
@@ -27,12 +28,12 @@ export function Sidebar({ board, onUpdateBoard, onError }: SidebarProps) {
 
     const userMessage = input.trim();
     setInput("");
-    setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+    setMessages((prev) => [...prev, { id: `msg-${Date.now()}-u`, role: "user", content: userMessage }]);
     setIsLoading(true);
 
     try {
       const res = await chatWithAI(userMessage, board);
-      setMessages((prev) => [...prev, { role: "ai", content: res.reply }]);
+      setMessages((prev) => [...prev, { id: `msg-${Date.now()}-a`, role: "ai", content: res.reply }]);
       if (res.board) {
         onUpdateBoard(res.board);
       }
@@ -40,7 +41,7 @@ export function Sidebar({ board, onUpdateBoard, onError }: SidebarProps) {
       onError(err.message || "Failed to contact AI.");
       setMessages((prev) => [
         ...prev,
-        { role: "ai", content: "Sorry, I encountered an error while processing your request." },
+        { id: `msg-${Date.now()}-e`, role: "ai", content: "Sorry, I encountered an error while processing your request." },
       ]);
     } finally {
       setIsLoading(false);
@@ -85,9 +86,9 @@ export function Sidebar({ board, onUpdateBoard, onError }: SidebarProps) {
               How can I help you manage your board today?
             </div>
           ) : (
-            messages.map((msg, i) => (
+            messages.map((msg) => (
               <div
-                key={i}
+                key={msg.id}
                 className={`max-w-[85%] rounded-2xl p-4 text-sm ${
                   msg.role === "user"
                     ? "ml-auto bg-[var(--primary-blue)] text-white"

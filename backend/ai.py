@@ -13,7 +13,7 @@ client = AsyncOpenAI(
     api_key=OPENROUTER_API_KEY,
 )
 
-MODEL = "openai/gpt-oss-120b"
+MODEL = "openai/gpt-oss-120b:free"
 from models import BoardData
 import json
 
