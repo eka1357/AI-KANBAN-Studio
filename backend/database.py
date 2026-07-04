@@ -3,10 +3,10 @@ import json
 import os
 from models import BoardData
 
-DB_PATH = os.path.join("/app/data", "kanban.db")
-if not os.path.exists("/app/data"):
-    # Fallback for local testing outside Docker
-    DB_PATH = "kanban.db"
+DB_PATH = os.getenv(
+    "DB_PATH",
+    os.path.join("/app/data", "kanban.db") if os.path.exists("/app/data") else "kanban.db",
+)
 
 async def init_db():
     async with aiosqlite.connect(DB_PATH) as db:

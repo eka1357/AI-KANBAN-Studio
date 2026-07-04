@@ -48,10 +48,11 @@ export default function Login() {
         
         <form onSubmit={handleLogin} className="mt-8 space-y-4">
           <div>
-            <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-[var(--gray-text)]">
+            <label htmlFor="username" className="mb-2 block text-xs font-semibold uppercase tracking-wide text-[var(--gray-text)]">
               Username
             </label>
             <input
+              id="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -60,10 +61,11 @@ export default function Login() {
             />
           </div>
           <div>
-            <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-[var(--gray-text)]">
+            <label htmlFor="password" className="mb-2 block text-xs font-semibold uppercase tracking-wide text-[var(--gray-text)]">
               Password
             </label>
             <input
+              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

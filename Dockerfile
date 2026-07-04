@@ -1,6 +1,8 @@
 # Stage 1: Build the Next.js frontend
 FROM node:20-slim AS builder
 
+ENV NEXT_TELEMETRY_DISABLED=1
+
 WORKDIR /app
 COPY frontend/package*.json ./
 RUN npm ci
@@ -17,8 +19,8 @@ WORKDIR /app
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 # Install dependencies
-COPY backend/pyproject.toml .
-RUN uv sync --no-dev
+COPY backend/pyproject.toml backend/uv.lock ./
+RUN uv sync --no-dev --frozen
 
 # Copy backend source
 COPY backend/ .

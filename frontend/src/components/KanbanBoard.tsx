@@ -48,7 +48,9 @@ export const KanbanBoard = () => {
     setBoard((prev) => {
       if (!prev) return prev;
       const next = updater(prev);
-      saveBoard(next).catch(console.error);
+      saveBoard(next).catch((err) =>
+        setError(err.message || "Failed to save board.")
+      );
       return next;
     });
   };

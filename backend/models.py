@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import List, Dict, Optional
 
 class Card(BaseModel):
     id: str
@@ -9,8 +8,8 @@ class Card(BaseModel):
 class Column(BaseModel):
     id: str
     title: str
-    cardIds: List[str]
+    cardIds: list[str]
 
 class BoardData(BaseModel):
-    columns: List[Column]
-    cards: Dict[str, Card]
+    columns: list[Column]
+    cards: dict[str, Card]
