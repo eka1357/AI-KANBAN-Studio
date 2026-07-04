@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { KanbanBoard } from "@/components/KanbanBoard";
 
 // vi.hoisted runs before vi.mock factories and before imports,
