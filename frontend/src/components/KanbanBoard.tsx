@@ -48,8 +48,11 @@ export const KanbanBoard = () => {
     setBoard((prev) => {
       if (!prev) return prev;
       const next = updater(prev);
-      saveBoard(next).catch((err) =>
-        setError(err.message || "Failed to save board.")
+      // Save outside the render cycle to avoid strict-mode double-invocation
+      Promise.resolve().then(() =>
+        saveBoard(next).catch((err) =>
+          setError(err.message || "Failed to save board.")
+        )
       );
       return next;
     });
@@ -200,7 +203,7 @@ export const KanbanBoard = () => {
                 <KanbanColumn
                   key={column.id}
                   column={column}
-                  cards={column.cardIds.map((cardId) => board.cards[cardId])}
+                  cards={column.cardIds.map((cardId) => board.cards[cardId]).filter(Boolean)}
                   onRename={handleRenameColumn}
                   onAddCard={handleAddCard}
                   onDeleteCard={handleDeleteCard}

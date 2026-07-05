@@ -35,9 +35,9 @@ async def init_db():
         ''', ("user", "password"))
         await db.commit()
 
-async def get_user_id(username: str, password_hash: str) -> int | None:
+async def get_user_id(username: str, password: str) -> int | None:
     async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute('SELECT id FROM users WHERE username = ? AND password_hash = ?', (username, password_hash)) as cursor:
+        async with db.execute('SELECT id FROM users WHERE username = ? AND password_hash = ?', (username, password)) as cursor:
             row = await cursor.fetchone()
             return row[0] if row else None
 

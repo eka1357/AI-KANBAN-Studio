@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { type BoardData } from "@/lib/kanban";
 import { chatWithAI } from "@/lib/api";
 
@@ -21,6 +21,11 @@ export function Sidebar({ board, onUpdateBoard, onError }: SidebarProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isLoading]);
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,12 +33,12 @@ export function Sidebar({ board, onUpdateBoard, onError }: SidebarProps) {
 
     const userMessage = input.trim();
     setInput("");
-    setMessages((prev) => [...prev, { id: `msg-${Date.now()}-u`, role: "user", content: userMessage }]);
+    setMessages((prev) => [...prev, { id: crypto.randomUUID(), role: "user", content: userMessage }]);
     setIsLoading(true);
 
     try {
       const res = await chatWithAI(userMessage, board);
-      setMessages((prev) => [...prev, { id: `msg-${Date.now()}-a`, role: "ai", content: res.reply }]);
+      setMessages((prev) => [...prev, { id: crypto.randomUUID(), role: "ai", content: res.reply }]);
       if (res.board) {
         onUpdateBoard(res.board);
       }
@@ -41,7 +46,7 @@ export function Sidebar({ board, onUpdateBoard, onError }: SidebarProps) {
       onError(err.message || "Failed to contact AI.");
       setMessages((prev) => [
         ...prev,
-        { id: `msg-${Date.now()}-e`, role: "ai", content: "Sorry, I encountered an error while processing your request." },
+        { id: crypto.randomUUID(), role: "ai", content: "Sorry, I encountered an error while processing your request." },
       ]);
     } finally {
       setIsLoading(false);
@@ -104,6 +109,7 @@ export function Sidebar({ board, onUpdateBoard, onError }: SidebarProps) {
               Thinking...
             </div>
           )}
+          <div ref={chatEndRef} />
         </div>
 
         <div className="border-t border-[var(--stroke)] p-6">

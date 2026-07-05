@@ -8,6 +8,7 @@ import os
 from database import init_db, get_user_id, get_board, save_board
 from models import BoardData
 from auth import create_session, destroy_session, get_current_user
+from ai import chat_with_ai
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -65,8 +66,6 @@ class ChatRequest(BaseModel):
 
 @app.post("/api/chat")
 async def chat_endpoint(req: ChatRequest, user_id: int = Depends(get_current_user)):
-    from ai import chat_with_ai
-    
     response = await chat_with_ai(req.message, req.board)
     
     # If the AI modified the board, we should save it automatically
